@@ -58,8 +58,8 @@ import java.net.SocketException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import org.mariadb.jdbc.HostAddress;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.UrlParser;
 import org.mariadb.jdbc.internal.com.read.dao.Results;
 import org.mariadb.jdbc.internal.failover.FailoverProxy;
@@ -73,7 +73,7 @@ public class AuroraProtocol extends MastersReplicasProtocol {
   public AuroraProtocol(
       final UrlParser url,
       final GlobalStateInfo globalInfo,
-      final ReentrantLock lock,
+      final LoggingReentrantLock lock,
       LruTraceCache traceCache) {
     super(url, globalInfo, lock, traceCache);
   }

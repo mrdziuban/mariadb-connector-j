@@ -62,8 +62,8 @@ import java.sql.SQLTimeoutException;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.locks.ReentrantLock;
 import org.mariadb.jdbc.HostAddress;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.MariaDbConnection;
 import org.mariadb.jdbc.MariaDbStatement;
 import org.mariadb.jdbc.UrlParser;
@@ -265,7 +265,7 @@ public interface Protocol {
 
   void setActiveStreamingResult(Results mariaSelectResultSet);
 
-  ReentrantLock getLock();
+  LoggingReentrantLock getLock();
 
   void setServerStatus(short serverStatus);
 

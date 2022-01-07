@@ -37,7 +37,7 @@ import java.sql.*;
 import java.sql.Date;
 import java.time.*;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.MariaDbBlob;
 import org.mariadb.jdbc.MariaDbClob;
 import org.mariadb.jdbc.MariaDbResultSetMetaData;
@@ -94,7 +94,7 @@ public class SelectResultSet implements ResultSet {
   private int lastRowPointer = -1;
   private boolean isClosed;
   private boolean eofDeprecated;
-  private ReentrantLock lock;
+  private LoggingReentrantLock lock;
   private boolean forceAlias;
 
   /**

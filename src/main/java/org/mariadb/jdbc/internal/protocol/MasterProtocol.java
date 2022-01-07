@@ -55,8 +55,8 @@ package org.mariadb.jdbc.internal.protocol;
 import java.io.Closeable;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.locks.ReentrantLock;
 import org.mariadb.jdbc.HostAddress;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.UrlParser;
 import org.mariadb.jdbc.internal.failover.FailoverProxy;
 import org.mariadb.jdbc.internal.failover.Listener;
@@ -77,7 +77,7 @@ public class MasterProtocol extends AbstractQueryProtocol implements Closeable {
   public MasterProtocol(
       final UrlParser urlParser,
       final GlobalStateInfo globalInfo,
-      final ReentrantLock lock,
+      final LoggingReentrantLock lock,
       LruTraceCache traceCache) {
     super(urlParser, globalInfo, lock, traceCache);
   }
