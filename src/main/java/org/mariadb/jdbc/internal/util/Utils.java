@@ -64,9 +64,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import javax.net.SocketFactory;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.UrlParser;
 import org.mariadb.jdbc.internal.com.send.parameters.ParameterHolder;
 import org.mariadb.jdbc.internal.failover.FailoverProxy;
@@ -595,7 +595,7 @@ public class Utils {
    */
   public static Protocol retrieveProxy(final UrlParser urlParser, final GlobalStateInfo globalInfo)
       throws SQLException {
-    final ReentrantLock lock = new ReentrantLock();
+    final LoggingReentrantLock lock = new LoggingReentrantLock();
     final LruTraceCache traceCache =
         urlParser.getOptions().enablePacketDebug ? new LruTraceCache() : null;
     Protocol protocol;

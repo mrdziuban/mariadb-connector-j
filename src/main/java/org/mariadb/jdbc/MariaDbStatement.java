@@ -60,7 +60,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.mariadb.jdbc.internal.com.read.dao.Results;
@@ -94,7 +93,7 @@ public class MariaDbStatement implements Statement, Cloneable {
     mapper.put("\\", "\\\\");
   }
 
-  protected final ReentrantLock lock;
+  protected final LoggingReentrantLock lock;
   protected final int resultSetScrollType;
   protected final int resultSetConcurrency;
   protected final Options options;

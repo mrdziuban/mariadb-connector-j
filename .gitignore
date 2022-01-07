@@ -1,9 +1,12 @@
+*.DS_STORE
+.bsp
 .classpath
 .project
 .settings
 
 # Keep empty directories:
 # Keep empty directories: >> .gitignore/.git*
-/target/
+target/
+hs_err*.log
 .idea
 /mariadb-java-client.iml

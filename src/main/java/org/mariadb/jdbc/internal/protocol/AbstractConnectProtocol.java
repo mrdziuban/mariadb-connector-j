@@ -66,12 +66,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import org.mariadb.jdbc.HostAddress;
+import org.mariadb.jdbc.LoggingReentrantLock;
 import org.mariadb.jdbc.MariaDbConnection;
 import org.mariadb.jdbc.UrlParser;
 import org.mariadb.jdbc.authentication.AuthenticationPlugin;
@@ -121,7 +121,7 @@ public abstract class AbstractConnectProtocol implements Protocol {
   protected static final String CHECK_GALERA_STATE_QUERY = "show status like 'wsrep_local_state'";
 
   private static final Logger logger = LoggerFactory.getLogger(AbstractConnectProtocol.class);
-  protected final ReentrantLock lock;
+  protected final LoggingReentrantLock lock;
   protected final UrlParser urlParser;
   protected final Options options;
   protected final LruTraceCache traceCache;
@@ -166,7 +166,7 @@ public abstract class AbstractConnectProtocol implements Protocol {
   public AbstractConnectProtocol(
       final UrlParser urlParser,
       final GlobalStateInfo globalInfo,
-      final ReentrantLock lock,
+      final LoggingReentrantLock lock,
       LruTraceCache traceCache) {
     urlParser.auroraPipelineQuirks();
     this.lock = lock;
@@ -434,7 +434,7 @@ public abstract class AbstractConnectProtocol implements Protocol {
 
   private void forceAbort() {
     try (MasterProtocol copiedProtocol =
-        new MasterProtocol(urlParser, new GlobalStateInfo(), new ReentrantLock(), traceCache)) {
+        new MasterProtocol(urlParser, new GlobalStateInfo(), new LoggingReentrantLock(), traceCache)) {
       copiedProtocol.setHostAddress(getHostAddress());
       copiedProtocol.connect();
       // no lock, because there is already a query running that possessed the lock.
@@ -1609,7 +1609,7 @@ public abstract class AbstractConnectProtocol implements Protocol {
   }
 
   @Override
-  public ReentrantLock getLock() {
+  public LoggingReentrantLock getLock() {
     return lock;
   }
 

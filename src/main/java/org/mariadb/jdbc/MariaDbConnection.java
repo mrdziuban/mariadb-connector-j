@@ -59,7 +59,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Executor;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.mariadb.jdbc.internal.logging.Logger;
@@ -97,7 +96,7 @@ public class MariaDbConnection implements Connection {
           "^(\\s*\\/\\*([^\\*]|\\*[^\\/])*\\*\\/)*\\s*(SELECT|UPDATE|INSERT|DELETE|REPLACE|DO|CALL)",
           Pattern.CASE_INSENSITIVE);
 
-  public final ReentrantLock lock;
+  public final LoggingReentrantLock lock;
   /** the protocol to communicate with. */
   private final Protocol protocol;
   /** the properties for the client. */
@@ -130,6 +129,7 @@ public class MariaDbConnection implements Connection {
       callableStatementCache = CallableStatementCache.newInstance(options.callableStmtCacheSize);
     }
     this.lock = protocol.getLock();
+    this.lock.setConnection(this);
     this.exceptionFactory = ExceptionFactory.of(this.getServerThreadId(), this.options);
   }
 
