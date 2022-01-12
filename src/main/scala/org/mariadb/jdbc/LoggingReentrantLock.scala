@@ -22,8 +22,6 @@ class LoggingReentrantLock extends ReentrantLock {
     LoggerFactory.getLogger(getClass)
   }
 
-  private val jsonPrinter: Printer = Printer.spaces2.copy(colonLeft = "")
-
   private def threadInfo(t: Thread, dropStack: Int): Json =
     Json.obj(
       "hashCode" := t.hashCode,
@@ -34,7 +32,7 @@ class LoggingReentrantLock extends ReentrantLock {
     )
 
   private def logDebug(methodCalled: String): Unit =
-    logger.debug(jsonPrinter.print(Json.obj(
+    logger.debug(Json.obj(
       "time" := Instant.now,
       "connection" := Option(connection).map(c => Json.obj(
         "hashCode" := connection.hashCode,
@@ -46,7 +44,7 @@ class LoggingReentrantLock extends ReentrantLock {
         "callingThread" := threadInfo(Thread.currentThread, 3),
         "holdingThread" := Option(getOwner).map(threadInfo(_, 5)),
       ),
-    )))
+    ).noSpaces)
 
   override def lock(): Unit = {
     logDebug("lock")
