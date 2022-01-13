@@ -23,6 +23,8 @@ class LoggingReentrantLock extends ReentrantLock {
     LoggerFactory.getLogger(getClass)
   }
 
+  private lazy val sync: AnyRef = getLockSync(this)
+
   private def threadInfo(t: Thread, dropStack: Int): Json =
     Json.obj(
       "address" := getMemoryAddress(t),
@@ -47,6 +49,10 @@ class LoggingReentrantLock extends ReentrantLock {
         "isLocked" := isLocked,
         "callingThread" := threadInfo(Thread.currentThread, 3),
         "holdingThread" := Option(getOwner).map(threadInfo(_, 5)),
+        "sync" := Json.obj(
+          "class" := sync.getClass.getName,
+          "address" := getMemoryAddress(sync),
+        ),
       ),
     ).noSpaces)
 
@@ -64,6 +70,12 @@ class LoggingReentrantLock extends ReentrantLock {
 object LoggingReentrantLock {
   private val instantFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").withZone(ZoneId.systemDefault())
   implicit val instantEncoder: Encoder[Instant] = Encoder[String].contramap(instantFormatter.format)
+
+  private def getLockSync(lock: LoggingReentrantLock): AnyRef = {
+    val syncField = classOf[ReentrantLock].getDeclaredField("sync")
+    syncField.setAccessible(true)
+    syncField.get(lock)
+  }
 
   private lazy val unsafe: Unsafe = {
     val theUnsafe = classOf[Unsafe].getDeclaredField("theUnsafe")
