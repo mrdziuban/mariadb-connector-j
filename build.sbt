@@ -10,7 +10,7 @@ lazy val mariadbConnector = project.in(file("."))
     scalaVersion := "2.13.7",
     name := "mariadb-java-client",
     organization := "org.mariadb.jdbc",
-    version := "2.7.4-BL6",
+    version := "2.7.4-BL7",
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.2.3" % "test,optional",
       "com.amazonaws" % "aws-java-sdk-rds" % "1.11.734" % "optional",
